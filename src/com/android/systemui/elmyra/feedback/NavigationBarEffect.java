@@ -1,6 +1,7 @@
 package com.google.android.systemui.elmyra.feedback;
 
 import android.content.Context;
+import com.android.systemui.navigation.Navigator;
 import com.android.systemui.SysUiServiceProvider;
 import com.android.systemui.statusbar.phone.NavigationBarView;
 import com.android.systemui.statusbar.phone.StatusBar;
@@ -25,16 +26,16 @@ public abstract class NavigationBarEffect implements FeedbackEffect {
         if (!validateFeedbackEffects(mFeedbackEffects)) {
             mFeedbackEffects.clear();
         }
-        NavigationBarView navigationBarView = statusBar.getNavigationBarView();
-        if (navigationBarView == null) {
+        Navigator mNavigationBarView = statusBar.getNavigationBarView();
+        if (mNavigationBarView == null) {
             mFeedbackEffects.clear();
         }
-        if (mFeedbackEffects.isEmpty() && navigationBarView != null) {
-            mFeedbackEffects.addAll(findFeedbackEffects(navigationBarView));
+        if (mFeedbackEffects.isEmpty() && mNavigationBarView != null) {
+            mFeedbackEffects.addAll(findFeedbackEffects(mNavigationBarView));
         }
     }
 
-    protected abstract List<FeedbackEffect> findFeedbackEffects(NavigationBarView navigationBarView);
+    protected abstract List<FeedbackEffect> findFeedbackEffects(Navigator mNavigationBarView);
 
     protected boolean isActiveFeedbackEffect(FeedbackEffect feedbackEffect) {
         return true;

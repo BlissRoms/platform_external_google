@@ -8,7 +8,7 @@ import android.os.UserHandle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 
-import com.android.internal.util.du.ActionUtils;
+import com.android.internal.utils.ActionHandler;
 import com.android.systemui.Dependency;
 import com.android.systemui.assist.AssistManager;
 
@@ -49,25 +49,25 @@ public class CustomActions extends Action {
                 launchCamera(getContext());
                 break;
             case 4: // Flashlight
-                ActionUtils.toggleCameraFlash();
+                ActionHandler.StatusBarHelper.toggleFlashlight();
                 break;
             case 5: // Clear notifications
-                ActionUtils.clearAllNotifications();
+                ActionHandler.StatusBarHelper.clearAllNotifications();
                 break;
             case 6: // Volume panel
-                ActionUtils.toggleVolumePanel(getContext());
+                ActionHandler.volumePanel(getContext());
                 break;
             case 7: // Screen off
-                ActionUtils.switchScreenOff(getContext());
+                ActionHandler.screenOff(getContext());
                 break;
             case 8: // Notification panel
-                ActionUtils.toggleNotifications();
+                ActionHandler.StatusBarHelper.expandNotificationPanel();
                 break;
-            case 9: // Screenshot
-                ActionUtils.takeScreenshot(true);
-                break;
+//            case 9: // Screenshot
+//                ActionHandler.volumePanel(getContext());
+//                break;
             case 10: // QS panel
-                ActionUtils.toggleQsPanel();
+                ActionHandler.StatusBarHelper.expandSettingsPanel();
                 break;
         }
     }
