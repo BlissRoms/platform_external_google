@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.UserHandle;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -16,36 +17,45 @@ import com.google.android.systemui.elmyra.sensors.GestureSensor.DetectionPropert
 
 public class CustomActions extends Action {
 
-    private int mActionSelection;
-    protected AssistManager mAssistManager;
+    private AssistManager mAssistManager;
+    private PowerManager pm;
 
     public CustomActions(Context context) {
         super(context, null);
         mAssistManager = Dependency.get(AssistManager.class);
+        pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
     }
 
     @Override
-	public boolean isAvailable() {
+    public boolean isAvailable() {
         return true;
     }
 
     public void onTrigger(DetectionProperties detectionProperties) {
         final ContentResolver resolver = getContext().getContentResolver();
 
-        mActionSelection = Settings.Secure.getIntForUser(resolver,
+        int mActionSelection = Settings.Secure.getIntForUser(resolver,
                 Settings.Secure.SQUEEZE_SELECTION, 0, UserHandle.USER_CURRENT);
+
+        // Check if the screen is turned on
+        if (pm == null) return;
+        boolean isScreenOn = pm.isScreenOn();
 
         switch (mActionSelection) {
             case 0: // No action
             default:
                 break;
             case 1: // Assistant
+                ActionHandler.switchScreenOn(getContext());
                 mAssistManager.startAssist(new Bundle() /* args */);
                 break;
             case 2: // Voice search
-                launchVoiceSearch(getContext());
+                if (isScreenOn) {
+                    launchVoiceSearch(getContext());
+                }
                 break;
             case 3: // Camera
+                ActionHandler.switchScreenOn(getContext());
                 launchCamera(getContext());
                 break;
             case 4: // Flashlight
@@ -55,19 +65,28 @@ public class CustomActions extends Action {
                 ActionHandler.StatusBarHelper.clearAllNotifications();
                 break;
             case 6: // Volume panel
-                ActionHandler.volumePanel(getContext());
+                if (isScreenOn) {
+                    ActionHandler.volumePanel(getContext());
+                }
                 break;
             case 7: // Screen off
-                ActionHandler.screenOff(getContext());
+                if (isScreenOn) {
+                    ActionHandler.screenOff(getContext());
+                }
                 break;
             case 8: // Notification panel
-                ActionHandler.StatusBarHelper.expandNotificationPanel();
+                if (isScreenOn) {
+                }
                 break;
 //            case 9: // Screenshot
-//                ActionHandler.volumePanel(getContext());
+//                  if (isScreenOn) {
+//                    ActionHandler.volumePanel(getContext());
+//                  }
 //                break;
             case 10: // QS panel
-                ActionHandler.StatusBarHelper.expandSettingsPanel();
+                if (isScreenOn) {
+                    ActionHandler.StatusBarHelper.expandSettingsPanel();
+                }
                 break;
         }
     }
