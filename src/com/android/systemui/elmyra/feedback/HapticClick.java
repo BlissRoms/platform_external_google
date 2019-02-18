@@ -100,10 +100,10 @@ public class HapticClick implements FeedbackEffect {
                 }
                 break;
             case 15: // Media Next
-                    return;
                 break;
             case 16: // Media play pause
-                    return;
+                break;
+            case 17: // Ringer modes
                 break;
         }
         if (!(mLastGestureStage == 2 || i != 2 || mVibrator == null)) {
@@ -188,10 +188,10 @@ public class HapticClick implements FeedbackEffect {
                 }
                 break;
             case 15: // Media Next
-                    return;
                 break;
             case 16: // Media play pause
-                    return;
+                break;
+            case 17: // Ringer modes
                 break;
         }
         if ((detectionProperties == null || !detectionProperties.isHapticConsumed()) && mVibrator != null) {
