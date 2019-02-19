@@ -19,23 +19,24 @@ public abstract class NavigationBarEffect implements FeedbackEffect {
 
     private void refreshFeedbackEffects() {
         StatusBar statusBar = (StatusBar) SysUiServiceProvider.getComponent(mContext, StatusBar.class);
-        if (statusBar == null || statusBar.getNavigationBarView() == null) {
-            mFeedbackEffects.clear();
-            return;
-        }
+        Navigator navigationBarView = statusBar.getNavigationBarView();
+        Navigator navigationBarView;
+        if (statusBar != null) {
+            navigationBarView = statusBar.getNavigationBarView();
+            if (navigationBarView == null || navigationBarView.isFullGestureMode()) {
+                mFeedbackEffects.clear();
+                return;
+            }
+        } else {
         if (!validateFeedbackEffects(mFeedbackEffects)) {
             mFeedbackEffects.clear();
         }
-        Navigator mNavigationBarView = statusBar.getNavigationBarView();
-        if (mNavigationBarView == null) {
-            mFeedbackEffects.clear();
-        }
-        if (mFeedbackEffects.isEmpty() && mNavigationBarView != null) {
-            mFeedbackEffects.addAll(findFeedbackEffects(mNavigationBarView));
+        if (mFeedbackEffects.isEmpty()) {
+            mFeedbackEffects.addAll(findFeedbackEffects(navigationBarView));
         }
     }
 
-    protected abstract List<FeedbackEffect> findFeedbackEffects(Navigator mNavigationBarView);
+    protected abstract List<FeedbackEffect> findFeedbackEffects(Navigator navigationBarView);
 
     protected boolean isActiveFeedbackEffect(FeedbackEffect feedbackEffect) {
         return true;
