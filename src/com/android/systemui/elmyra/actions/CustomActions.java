@@ -9,9 +9,7 @@ import android.os.PowerManager;
 import android.os.UserHandle;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.view.WindowManager;
 
-import com.android.internal.util.omni.DeviceUtils;
 import com.android.internal.utils.ActionHandler;
 import com.android.systemui.Dependency;
 import com.android.systemui.assist.AssistManager;
@@ -24,9 +22,6 @@ public class CustomActions extends Action {
 
     private AssistManager mAssistManager;
     private PowerManager pm;
-
-    private static final int SCREEN_RECORD_MID_QUALITY = WindowManager.SCREEN_RECORD_MID_QUALITY;
-    private int mMode = SCREEN_RECORD_MID_QUALITY;
 
     public CustomActions(Context context) {
         super(context, null);
@@ -84,14 +79,13 @@ public class CustomActions extends Action {
                 break;
             case 8: // Notification panel
                 if (isScreenOn) {
-                    ActionHandler.StatusBarHelper.expandNotificationPanel();
                 }
                 break;
-            case 9: // Screenrecord
-                  if (isScreenOn) {
-                     DeviceUtils.takeScreenrecord(mMode);
-                  }
-                break;
+//            case 9: // Screenshot
+//                  if (isScreenOn) {
+//                    ActionHandler.volumePanel(getContext());
+//                  }
+//                break;
             case 10: // QS panel
                 if (isScreenOn) {
                     ActionHandler.StatusBarHelper.expandSettingsPanel();
@@ -100,16 +94,6 @@ public class CustomActions extends Action {
             case 11: // Application
                 if (isScreenOn) {
                     launchApp(getContext());
-                }
-                break;
-            case 12: // Split Screen
-                if (isScreenOn) {
-                    ActionHandler.StatusBarHelper.splitScreen();
-                }
-                break;
-            case 13: // Last app
-                if (isScreenOn) {
-                    ActionHandler.switchToLastApp(getContext());
                 }
                 break;
         }

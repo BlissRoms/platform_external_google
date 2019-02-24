@@ -84,16 +84,6 @@ public class HapticClick implements FeedbackEffect {
                     return;
                 }
                 break;
-            case 12: // Split Screen
-                if (!isScreenOn) {
-                    return;
-                }
-                break;
-            case 13: // Last Aoo
-                if (!isScreenOn) {
-                    return;
-                }
-                break;
         }
         if (!(mLastGestureStage == 2 || i != 2 || mVibrator == null)) {
             mVibrator.vibrate(mProgressVibrationEffect, SONIFICATION_AUDIO_ATTRIBUTES);
@@ -157,16 +147,6 @@ public class HapticClick implements FeedbackEffect {
                 }
                 break;
             case 11: // Application
-                if (!isScreenOn) {
-                    return;
-                }
-                break;
-            case 12: // Split screen
-                if (!isScreenOn) {
-                    return;
-                }
-                break;
-            case 13: // Last App
                 if (!isScreenOn) {
                     return;
                 }
