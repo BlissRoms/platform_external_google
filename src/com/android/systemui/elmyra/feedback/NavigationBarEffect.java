@@ -6,8 +6,8 @@ import android.content.Context;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.content.ContentResolver;
-import com.android.systemui.navigation.Navigator;
 import com.android.systemui.SysUiServiceProvider;
+import com.android.systemui.navigation.Navigator;
 import com.android.systemui.statusbar.phone.NavigationBarView;
 import com.android.systemui.statusbar.phone.StatusBar;
 import com.google.android.systemui.elmyra.sensors.GestureSensor.DetectionProperties;
@@ -47,6 +47,10 @@ public abstract class NavigationBarEffect implements FeedbackEffect {
 
     protected boolean isActiveFeedbackEffect(FeedbackEffect feedbackEffect) {
         return true;
+    }
+
+    protected Context getContext() {
+        return mContext;
     }
 
     @Override
