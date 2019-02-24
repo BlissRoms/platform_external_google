@@ -124,9 +124,6 @@ public class CustomActions extends Action {
             case 16: // Media play pause
                     ActionHandler.dispatchMediaKeyWithWakeLock(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, getContext());
                 break;
-            case 17: // Ringer modes
-                DeviceUtils.toggleRingerModes(getContext());
-                break;
         }
     }
 
