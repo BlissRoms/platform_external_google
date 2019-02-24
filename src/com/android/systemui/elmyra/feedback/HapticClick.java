@@ -89,21 +89,10 @@ public class HapticClick implements FeedbackEffect {
                     return;
                 }
                 break;
-            case 13: // Last App
+            case 13: // Last Aoo
                 if (!isScreenOn) {
                     return;
                 }
-                break;
-            case 14: // Screenrecord
-                if (!isScreenOn) {
-                    return;
-                }
-                break;
-            case 15: // Media Next
-                    return;
-                break;
-            case 16: // Media play pause
-                    return;
                 break;
         }
         if (!(mLastGestureStage == 2 || i != 2 || mVibrator == null)) {
@@ -181,17 +170,6 @@ public class HapticClick implements FeedbackEffect {
                 if (!isScreenOn) {
                     return;
                 }
-                break;
-            case 14: // Screenrecord
-                if (!isScreenOn) {
-                    return;
-                }
-                break;
-            case 15: // Media Next
-                    return;
-                break;
-            case 16: // Media play pause
-                    return;
                 break;
         }
         if ((detectionProperties == null || !detectionProperties.isHapticConsumed()) && mVibrator != null) {

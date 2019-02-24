@@ -9,7 +9,6 @@ import android.os.PowerManager;
 import android.os.UserHandle;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.view.KeyEvent;
 import android.view.WindowManager;
 
 import com.android.internal.util.omni.DeviceUtils;
@@ -28,7 +27,6 @@ public class CustomActions extends Action {
 
     private static final int SCREEN_RECORD_MID_QUALITY = WindowManager.SCREEN_RECORD_MID_QUALITY;
     private int mMode = SCREEN_RECORD_MID_QUALITY;
-    public static final String INTENT_SCREENSHOT = "action_handler_screenshot";
 
     public CustomActions(Context context) {
         super(context, null);
@@ -89,9 +87,9 @@ public class CustomActions extends Action {
                     ActionHandler.StatusBarHelper.expandNotificationPanel();
                 }
                 break;
-            case 9: // Screenshot
-                if (isScreenOn) {
-                    ActionHandler.sendCommandToWindowManager(new Intent(INTENT_SCREENSHOT));
+            case 9: // Screenrecord
+                  if (isScreenOn) {
+                     DeviceUtils.takeScreenrecord(mMode);
                   }
                 break;
             case 10: // QS panel
@@ -113,16 +111,6 @@ public class CustomActions extends Action {
                 if (isScreenOn) {
                     ActionHandler.switchToLastApp(getContext());
                 }
-                break;
-            case 14: // Screenrecord
-                if (isScreenOn) {
-                    DeviceUtils.takeScreenrecord(mMode);
-                }
-            case 15: // Media Next
-                    ActionHandler.StatusBarHelper.sendSystemKeyToStatusBar(KeyEvent.KEYCODE_MEDIA_NEXT);
-                break;
-            case 16: // Media play pause
-                    ActionHandler.dispatchMediaKeyWithWakeLock(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, getContext());
                 break;
         }
     }
