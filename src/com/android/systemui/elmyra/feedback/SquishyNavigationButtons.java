@@ -22,12 +22,13 @@ public class SquishyNavigationButtons extends NavigationBarEffect {
     private final KeyguardViewMediator mKeyguardViewMediator;
     private final SquishyViewController mViewController;
 
-    private ContentResolver resolver;
+    private ContentResolver mResolver;
     private PowerManager mPm;
 
     public SquishyNavigationButtons(Context context) {
         super(context);
-        resolver = context.getContentResolver();
+        mResolver = context.getContentResolver();
+        mPm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         mViewController = new SquishyViewController(context);
         mKeyguardViewMediator = (KeyguardViewMediator) SysUiServiceProvider.getComponent(
             context, KeyguardViewMediator.class);
@@ -48,11 +49,8 @@ public class SquishyNavigationButtons extends NavigationBarEffect {
 
     @Override
     protected boolean isActiveFeedbackEffect(FeedbackEffect feedbackEffect) {
-
-        /* Make sure we're not calling the navbar animation if battery saver
-           mode is on and/or if the screen is off.*/
-        return !isSqueezeTurnedOff() && !mPm.isPowerSaveMode() && mPm.isScreenOn()
-                && !mKeyguardViewMediator.isShowingAndNotOccluded();
+        return !mPm.isPowerSaveMode() && !isSqueezeTurnedOff()
+                && mPm.isScreenOn() && !mKeyguardViewMediator.isShowingAndNotOccluded();
     }
 
     @Override
@@ -60,12 +58,17 @@ public class SquishyNavigationButtons extends NavigationBarEffect {
         return mViewController.isAttachedToWindow();
     }
 
+
     private boolean isSqueezeTurnedOff() {
-        String actionConfig = Settings.Secure.getStringForUser(resolver,
+        String actionConfig = Settings.Secure.getStringForUser(mResolver,
                 Settings.Secure.SQUEEZE_SELECTION_SMART_ACTIONS, UserHandle.USER_CURRENT);
         String action = ActionConfig.getActionFromDelimitedString(getContext(), actionConfig,
                 ActionHandler.SYSTEMUI_TASK_NO_ACTION);
-        return action.equals(ActionHandler.SYSTEMUI_TASK_NO_ACTION);
+        String longActionConfig = Settings.Secure.getStringForUser(mResolver,
+                Settings.Secure.LONG_SQUEEZE_SELECTION_SMART_ACTIONS, UserHandle.USER_CURRENT);
+        String longAction = ActionConfig.getActionFromDelimitedString(getContext(), longActionConfig,
+                ActionHandler.SYSTEMUI_TASK_NO_ACTION);
+        return action.equals(ActionHandler.SYSTEMUI_TASK_NO_ACTION)
+                && longAction.equals(ActionHandler.SYSTEMUI_TASK_NO_ACTION);
     }
-
 }
