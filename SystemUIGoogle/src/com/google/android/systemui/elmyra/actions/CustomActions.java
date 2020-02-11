@@ -92,6 +92,11 @@ public class CustomActions extends Action {
             case 11: // Ringer modes
                 BlissUtils.toggleRingerModes(getContext());
                 break;
+            case 12: // Application
+                if (isScreenOn) {
+                    launchApp(getContext(), detectionProperties.isLongSqueeze());
+                }
+                break;
         }
     }
 
@@ -105,29 +110,29 @@ public class CustomActions extends Action {
         }
     }
 
-    // private void launchApp(Context context, boolean isLongSqueeze) {
-    //     Intent intent = null;
-    //     String packageName = Settings.Secure.getStringForUser(context.getContentResolver(),
-    //             isLongSqueeze ? Settings.Secure.LONG_SQUEEZE_CUSTOM_APP
-    //             : Settings.Secure.SHORT_SQUEEZE_CUSTOM_APP,
-    //             UserHandle.USER_CURRENT);
-    //     String activity = Settings.Secure.getStringForUser(context.getContentResolver(),
-    //             isLongSqueeze ? Settings.Secure.LONG_SQUEEZE_CUSTOM_ACTIVITY
-    //             : Settings.Secure.SHORT_SQUEEZE_CUSTOM_ACTIVITY,
-    //             UserHandle.USER_CURRENT);
-    //     boolean launchActivity = activity != null && !TextUtils.equals("NONE", activity);
-    //     try {
-    //         if (launchActivity) {
-    //             intent = new Intent(Intent.ACTION_MAIN);
-    //             intent.setClassName(packageName, activity);
-    //         } else {
-    //             intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-    //         }
-    //         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    //         context.startActivity(intent);
-    //     } catch (Exception e) {
-    //     }
-    // }
+    private void launchApp(Context context, boolean isLongSqueeze) {
+        Intent intent = null;
+        String packageName = Settings.Secure.getStringForUser(context.getContentResolver(),
+                isLongSqueeze ? Settings.Secure.LONG_SQUEEZE_CUSTOM_APP
+                : Settings.Secure.SHORT_SQUEEZE_CUSTOM_APP,
+                UserHandle.USER_CURRENT);
+        String activity = Settings.Secure.getStringForUser(context.getContentResolver(),
+                isLongSqueeze ? Settings.Secure.LONG_SQUEEZE_CUSTOM_ACTIVITY
+                : Settings.Secure.SHORT_SQUEEZE_CUSTOM_ACTIVITY,
+                UserHandle.USER_CURRENT);
+        boolean launchActivity = activity != null && !TextUtils.equals("NONE", activity);
+        try {
+            if (launchActivity) {
+                intent = new Intent(Intent.ACTION_MAIN);
+                intent.setClassName(packageName, activity);
+            } else {
+                intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+            }
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            context.startActivity(intent);
+        } catch (Exception e) {
+        }
+    }
 
     private static void launchCamera(Context context) {
         Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE);

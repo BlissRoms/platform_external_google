@@ -32,6 +32,7 @@ android_app {
         "dagger2-2.19",
         "guava",
         "//external/kotlinc:kotlin-annotations",
+        "VendorSupport-preference",
     ],
     libs: [
         "telephony-common",
