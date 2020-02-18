@@ -12,7 +12,10 @@ import com.google.android.systemui.dreamliner.DockObserver;
 public class StatusBarGoogle extends StatusBar {
     @Override
     public void start() {
-        super.start();
+        try {
+           super.start();
+        } catch (Exception e) {
+        }
         DockObserver dockObserver = (DockObserver) Dependency.get(DockManager.class);
         dockObserver.setDreamlinerGear((ImageView) mStatusBarWindow.findViewById(R.id.dreamliner_gear));
         dockObserver.setIndicationController(new DockIndicationController(mContext));
