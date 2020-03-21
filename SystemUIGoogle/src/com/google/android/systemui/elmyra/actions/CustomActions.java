@@ -97,6 +97,12 @@ public class CustomActions extends Action {
             case 12: // Ringer modes
                 BlissUtils.toggleRingerModes(getContext());
                 break;
+            case 13: // Skip song
+                BlissUtils.sendSystemKeyToStatusBar(KeyEvent.KEYCODE_MEDIA_NEXT);
+                break;
+            case 14: // Previous song
+                BlissUtils.sendSystemKeyToStatusBar(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+                break;
         }
     }
 
