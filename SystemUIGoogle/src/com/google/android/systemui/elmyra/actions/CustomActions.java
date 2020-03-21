@@ -9,6 +9,7 @@ import android.os.UserHandle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 
 import com.android.internal.util.bliss.BlissUtils;
 import com.android.systemui.Dependency;
@@ -96,6 +97,12 @@ public class CustomActions extends Action {
                 if (isScreenOn) {
                     launchApp(getContext(), detectionProperties.isLongSqueeze());
                 }
+                break;
+            case 13: // Skip song
+                BlissUtils.sendSystemKeyToStatusBar(KeyEvent.KEYCODE_MEDIA_NEXT);
+                break;
+            case 14: // Previous song
+                BlissUtils.sendSystemKeyToStatusBar(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
                 break;
         }
     }
