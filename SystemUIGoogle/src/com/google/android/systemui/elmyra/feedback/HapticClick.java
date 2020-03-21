@@ -94,6 +94,8 @@ public class HapticClick implements FeedbackEffect {
                 }
                 break;
             case 12: // Ringer modes
+            case 13: // Skip song
+            case 14: // Previous song
                 break;
         }
 
@@ -163,6 +165,8 @@ public class HapticClick implements FeedbackEffect {
                 }
                 break;
             case 12: // Ringer modes
+            case 13: // Skip song
+            case 14: // Previous song
                 break;
         }
         if ((!detectionProperties.isHapticConsumed()) && mVibrator != null) {
