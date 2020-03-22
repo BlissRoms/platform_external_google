@@ -62,7 +62,7 @@ public class CustomActions extends Action {
                 BlissUtils.toggleCameraFlash();
                 break;
             case 5: // Clear notifications
-                // BlissUtils.clearAllNotifications();
+                BlissUtils.clearAllNotifications();
                 break;
             case 6: // Volume panel
                 if (isScreenOn) {
@@ -76,7 +76,7 @@ public class CustomActions extends Action {
                 break;
             case 8: // Notification panel
                 if (isScreenOn) {
-                    // BlissUtils.toggleNotifications();
+                    BlissUtils.toggleNotifications();
                 }
                 break;
             case 9: // Screenshot
@@ -86,7 +86,7 @@ public class CustomActions extends Action {
                 break;
             case 10: // QS panel
                 if (isScreenOn) {
-                    // BlissUtils.toggleQsPanel();
+                    BlissUtils.toggleQsPanel();
                 }
                 break;
             case 11: // Application
@@ -95,7 +95,7 @@ public class CustomActions extends Action {
                 }
                 break;
             case 12: // Ringer modes
-                // BlissUtils.toggleRingerModes(getContext());
+                BlissUtils.toggleRingerModes(getContext());
                 break;
         }
     }
