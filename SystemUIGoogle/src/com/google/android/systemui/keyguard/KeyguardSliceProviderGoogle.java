@@ -32,6 +32,8 @@ public class KeyguardSliceProviderGoogle extends KeyguardSliceProvider implement
     private SmartSpaceData mSmartSpaceData;
     private final Uri mWeatherUri = Uri.parse("content://com.android.systemui.keyguard/smartSpace/weather");
 
+    private KeyguardSliceProvider mKeyguardSliceProvider;
+
     private static class AddShadowTask extends AsyncTask<Bitmap, Void, Bitmap> {
         private final float mBlurRadius;
         private final WeakReference<KeyguardSliceProviderGoogle> mProviderReference;
@@ -101,7 +103,7 @@ public class KeyguardSliceProviderGoogle extends KeyguardSliceProvider implement
                     rowBuilder.setTitle(getFormattedDateLocked());
                     listBuilder.addRow(rowBuilder);
                 }
-                addWeather(listBuilder);
+                mKeyguardSliceProvider.addWeather(listBuilder);
                 addNextAlarmLocked(listBuilder);
                 addZenModeLocked(listBuilder);
                 addPrimaryActionLocked(listBuilder);
@@ -138,7 +140,7 @@ public class KeyguardSliceProviderGoogle extends KeyguardSliceProvider implement
                     }
                     listBuilder.addRow(rowBuilder2);
                 }
-                addWeather(listBuilder);
+                mKeyguardSliceProvider.addWeather(listBuilder);
                 addZenModeLocked(listBuilder);
                 addPrimaryActionLocked(listBuilder);
             }
@@ -146,21 +148,6 @@ public class KeyguardSliceProviderGoogle extends KeyguardSliceProvider implement
         }
         Trace.endSection();
         return slice;
-    }
-
-    private void addWeather(ListBuilder listBuilder) {
-        SmartSpaceCard weatherCard = mSmartSpaceData.getWeatherCard();
-        if (weatherCard != null && !weatherCard.isExpired()) {
-            RowBuilder rowBuilder = new RowBuilder(mWeatherUri);
-            rowBuilder.setTitle(weatherCard.getTitle());
-            Bitmap icon = weatherCard.getIcon();
-            if (icon != null) {
-                IconCompat createWithBitmap = IconCompat.createWithBitmap(icon);
-                createWithBitmap.setTintMode(Mode.DST);
-                rowBuilder.addEndItem(createWithBitmap, 1);
-            }
-            listBuilder.addRow(rowBuilder);
-        }
     }
 
     @Override
