@@ -81,7 +81,7 @@ public class CustomActions extends Action {
                 break;
             case 9: // Screenshot
                 if (isScreenOn) {
-                    BlissUtils.takeScreenshot(true);
+                    BlissUtils.takeScreenshot(3);
                 }
                 break;
             case 10: // QS panel
