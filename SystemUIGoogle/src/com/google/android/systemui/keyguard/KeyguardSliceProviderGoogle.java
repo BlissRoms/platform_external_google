@@ -103,10 +103,7 @@ public class KeyguardSliceProviderGoogle extends KeyguardSliceProvider implement
                     rowBuilder.setTitle(getFormattedDateLocked());
                     listBuilder.addRow(rowBuilder);
                 }
-                SmartSpaceCard weatherCard = mSmartSpaceData.getWeatherCard();
-                if (weatherCard != null && !weatherCard.isExpired()) {
-                    mKeyguardSliceProvider.addWeather(listBuilder);
-                }
+                addWeather(listBuilder);
                 addNextAlarmLocked(listBuilder);
                 addZenModeLocked(listBuilder);
                 addPrimaryActionLocked(listBuilder);
@@ -143,10 +140,7 @@ public class KeyguardSliceProviderGoogle extends KeyguardSliceProvider implement
                     }
                     listBuilder.addRow(rowBuilder2);
                 }
-                SmartSpaceCard weatherCard = mSmartSpaceData.getWeatherCard();
-                if (weatherCard != null && !weatherCard.isExpired()) {
-                    mKeyguardSliceProvider.addWeather(listBuilder);
-                }
+                addWeather(listBuilder);
                 addZenModeLocked(listBuilder);
                 addPrimaryActionLocked(listBuilder);
             }
@@ -154,6 +148,21 @@ public class KeyguardSliceProviderGoogle extends KeyguardSliceProvider implement
         }
         Trace.endSection();
         return slice;
+    }
+
+    private void addWeather(ListBuilder listBuilder) {
+        SmartSpaceCard weatherCard = mSmartSpaceData.getWeatherCard();
+        if (weatherCard != null && !weatherCard.isExpired()) {
+            RowBuilder rowBuilder = new RowBuilder(mWeatherUri);
+            rowBuilder.setTitle(weatherCard.getTitle());
+            Bitmap icon = weatherCard.getIcon();
+            if (icon != null) {
+                IconCompat createWithBitmap = IconCompat.createWithBitmap(icon);
+                createWithBitmap.setTintMode(Mode.DST);
+                rowBuilder.addEndItem(createWithBitmap, 1);
+            }
+            listBuilder.addRow(rowBuilder);
+        }
     }
 
     @Override
