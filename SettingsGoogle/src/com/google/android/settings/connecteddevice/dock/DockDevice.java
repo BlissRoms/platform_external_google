@@ -7,9 +7,9 @@ public class DockDevice {
     private DockDevice() {
     }
 
-    DockDevice(String id, String name) {
-        mId = id;
-        mName = name;
+    DockDevice(String str, String str2) {
+        mId = str;
+        mName = str2;
     }
 
     public String getName() {

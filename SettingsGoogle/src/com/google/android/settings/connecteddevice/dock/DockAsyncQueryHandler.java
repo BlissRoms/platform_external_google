@@ -13,29 +13,29 @@ public class DockAsyncQueryHandler extends AsyncQueryHandler {
         void onQueryComplete(int i, List<DockDevice> list);
     }
 
-    public DockAsyncQueryHandler(ContentResolver cr) {
-        super(cr);
+    public DockAsyncQueryHandler(ContentResolver contentResolver) {
+        super(contentResolver);
     }
 
     public static List<DockDevice> parseCursorToDockDevice(Cursor cursor) {
-        ArrayList<DockDevice> devices = new ArrayList();
+        ArrayList arrayList = new ArrayList();
         if (cursor != null && cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
-                devices.add(new DockDevice(cursor.getString(cursor.getColumnIndex("dockId")),
-                        cursor.getString(cursor.getColumnIndex("dockName"))));
+                arrayList.add(new DockDevice(cursor.getString(cursor.getColumnIndex("dockId")), cursor.getString(cursor.getColumnIndex("dockName"))));
             }
         }
-        return devices;
+        return arrayList;
     }
 
-    public void onQueryComplete(int token, Object cookie, Cursor cursor) {
-        super.onQueryComplete(token, cookie, cursor);
-        if (mListener != null) {
-            mListener.onQueryComplete(token, parseCursorToDockDevice(cursor));
+    public void onQueryComplete(int i, Object obj, Cursor cursor) {
+        super.onQueryComplete(i, obj, cursor);
+        OnQueryListener onQueryListener = mListener;
+        if (onQueryListener != null) {
+            onQueryListener.onQueryComplete(i, parseCursorToDockDevice(cursor));
         }
     }
 
-    public void setOnQueryListener(OnQueryListener listener) {
-        mListener = listener;
+    public void setOnQueryListener(OnQueryListener onQueryListener) {
+        mListener = onQueryListener;
     }
 }
