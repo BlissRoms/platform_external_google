@@ -5,12 +5,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-
-import com.android.internal.logging.nano.MetricsProto;
 import com.android.settings.R;
 import com.android.settings.core.instrumentation.InstrumentedDialogFragment;
 
 public class AwareEnabledDialogFragment extends InstrumentedDialogFragment {
+    public int getMetricsCategory() {
+        return 1701;
+    }
 
     public static void show(Fragment fragment, Boolean bool) {
         AwareEnabledDialogFragment awareEnabledDialogFragment = new AwareEnabledDialogFragment();
@@ -34,11 +35,7 @@ public class AwareEnabledDialogFragment extends InstrumentedDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(i);
         builder.setMessage(i2);
-        builder.setPositiveButton((int) R.string.nfc_how_it_works_got_it, null );
+        builder.setPositiveButton((int) R.string.nfc_how_it_works_got_it, (DialogInterface.OnClickListener) null);
         return builder.create();
-    }
-
-    public int getMetricsCategory() {
-        return MetricsProto.MetricsEvent.ABC;
     }
 }

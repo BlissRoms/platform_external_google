@@ -1,23 +1,22 @@
 package com.google.android.settings.aware;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.provider.Settings;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
-
 import com.android.settings.aware.AwareFeatureProvider;
 import com.android.settings.gestures.GesturePreferenceController;
 import com.android.settings.overlay.FeatureFactory;
+import com.android.settings.slices.SliceBackgroundWorker;
 import com.android.settings.widget.VideoPreference;
 import com.android.settingslib.core.lifecycle.LifecycleObserver;
 import com.android.settingslib.core.lifecycle.events.OnStart;
 import com.android.settingslib.core.lifecycle.events.OnStop;
 import com.google.android.settings.aware.AwareHelper;
 
-public class SkipGesturePreferenceController extends GesturePreferenceController
-        implements LifecycleObserver, OnStart, OnStop, AwareHelper.Callback {
-
+public class SkipGesturePreferenceController extends GesturePreferenceController implements LifecycleObserver, OnStart, OnStop, AwareHelper.Callback {
     private static final int OFF = 0;
     private static final int ON = 1;
     private static final String PREF_KEY_VIDEO = "gesture_skip_video";
@@ -25,6 +24,39 @@ public class SkipGesturePreferenceController extends GesturePreferenceController
     private final AwareFeatureProvider mFeatureProvider;
     private AwareHelper mHelper;
     private Preference mPreference;
+
+    public void copy() {
+        super.copy();
+    }
+
+    public Class<? extends SliceBackgroundWorker> getBackgroundWorkerClass() {
+        return super.getBackgroundWorkerClass();
+    }
+
+    public IntentFilter getIntentFilter() {
+        return super.getIntentFilter();
+    }
+
+
+    public String getVideoPrefKey() {
+        return PREF_KEY_VIDEO;
+    }
+
+    public boolean hasAsyncUpdate() {
+        return super.hasAsyncUpdate();
+    }
+
+    public boolean isCopyableSlice() {
+        return super.isCopyableSlice();
+    }
+
+    public boolean isPublicSlice() {
+        return true;
+    }
+
+    public boolean useDynamicSliceSummary() {
+        return super.useDynamicSliceSummary();
+    }
 
     public SkipGesturePreferenceController(Context context, String str) {
         super(context, str);
@@ -34,16 +66,8 @@ public class SkipGesturePreferenceController extends GesturePreferenceController
 
     public void displayPreference(PreferenceScreen preferenceScreen) {
         super.displayPreference(preferenceScreen);
-        ((VideoPreference) preferenceScreen.findPreference(PREF_KEY_VIDEO)).setHeight(VIDEO_HEIGHT_DP);
+        ((VideoPreference) preferenceScreen.findPreference(PREF_KEY_VIDEO)).setHeight(310.0f);
         mPreference = preferenceScreen.findPreference(getPreferenceKey());
-    }
-
-    public String getVideoPrefKey() {
-        return PREF_KEY_VIDEO;
-    }
-
-    public boolean isSliceable() {
-        return true;
     }
 
     public int getAvailabilityStatus() {
@@ -53,13 +77,16 @@ public class SkipGesturePreferenceController extends GesturePreferenceController
         return !mHelper.isGestureConfigurable() ? 5 : 0;
     }
 
+
     public boolean canHandleClicks() {
         return mHelper.isGestureConfigurable();
     }
 
     public boolean isChecked() {
-        return mFeatureProvider.isEnabled(mContext)
-                && Settings.Secure.getInt(mContext.getContentResolver(), "skip_gesture", 1) == 1;
+        if (!mFeatureProvider.isEnabled(mContext) || Settings.Secure.getInt(mContext.getContentResolver(), "skip_gesture", 1) != 1) {
+            return false;
+        }
+        return true;
     }
 
     public boolean setChecked(boolean z) {

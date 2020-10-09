@@ -1,32 +1,54 @@
 package com.google.android.settings.aware;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
-
 import com.android.internal.widget.LockPatternUtils;
 import com.android.settings.R;
 import com.android.settings.overlay.FeatureFactory;
 import com.android.settings.security.SecurityFeatureProvider;
 import com.android.settings.security.trustagent.TrustAgentManager;
+import com.android.settings.slices.SliceBackgroundWorker;
 
 public class AwareLockPreferenceController extends AwareTogglePreferenceController {
-
     private final LockPatternUtils mLockPatternUtils;
     private final TrustAgentManager mTrustAgentManager;
 
+    public void copy() {
+        super.copy();
+    }
+
+    public Class<? extends SliceBackgroundWorker> getBackgroundWorkerClass() {
+        return super.getBackgroundWorkerClass();
+    }
+
+    public IntentFilter getIntentFilter() {
+        return super.getIntentFilter();
+    }
+
+    public boolean hasAsyncUpdate() {
+        return super.hasAsyncUpdate();
+    }
+
+    public boolean isCopyableSlice() {
+        return super.isCopyableSlice();
+    }
+
+    public boolean useDynamicSliceSummary() {
+        return super.useDynamicSliceSummary();
+    }
+
     public AwareLockPreferenceController(Context context, String str) {
         super(context, str);
-        SecurityFeatureProvider securityFeatureProvider =
-                FeatureFactory.getFactory(context).getSecurityFeatureProvider();
+        SecurityFeatureProvider securityFeatureProvider = FeatureFactory.getFactory(context).getSecurityFeatureProvider();
         mLockPatternUtils = securityFeatureProvider.getLockPatternUtils(context);
         mTrustAgentManager = securityFeatureProvider.getTrustAgentManager();
     }
 
     public int getAvailabilityStatus() {
-        return (!mLockPatternUtils.isSecure(UserHandle.myUserId())
-                || !mHelper.isGestureConfigurable()) ? 5 : 0;
+        return (!mLockPatternUtils.isSecure(UserHandle.myUserId()) || !mHelper.isGestureConfigurable()) ? 5 : 0;
     }
 
     public boolean isChecked() {
@@ -40,12 +62,10 @@ public class AwareLockPreferenceController extends AwareTogglePreferenceControll
     }
 
     public CharSequence getSummary() {
-        CharSequence activeTrustAgentLabel =
-                mTrustAgentManager.getActiveTrustAgentLabel(mContext, mLockPatternUtils);
+        CharSequence activeTrustAgentLabel = mTrustAgentManager.getActiveTrustAgentLabel(mContext, mLockPatternUtils);
         if (TextUtils.isEmpty(activeTrustAgentLabel)) {
             return mContext.getString(R.string.summary_placeholder);
         }
-        return mContext.getString(R.string.lockpattern_settings_power_button_instantly_locks_summary,
-                new Object[]{activeTrustAgentLabel});
+        return mContext.getString(R.string.lockpattern_settings_power_button_instantly_locks_summary, new Object[]{activeTrustAgentLabel});
     }
 }

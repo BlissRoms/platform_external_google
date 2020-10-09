@@ -5,17 +5,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-
-import com.android.internal.logging.nano.MetricsProto;
 import com.android.settings.R;
 import com.android.settings.core.instrumentation.InstrumentedDialogFragment;
 
 public class AwareSettingsDialogFragment extends InstrumentedDialogFragment {
-
     private static DialogInterface.OnClickListener mClickListener;
 
     public int getMetricsCategory() {
-        return MetricsProto.MetricsEvent.ABC;
+        return 1633;
     }
 
     public static void show(Fragment fragment, DialogInterface.OnClickListener onClickListener) {

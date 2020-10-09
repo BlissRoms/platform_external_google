@@ -2,11 +2,10 @@ package com.google.android.settings.aware;
 
 import android.content.Context;
 import android.content.IntentFilter;
-import android.provider.Settings;
 import com.android.settings.R;
 import com.android.settings.slices.SliceBackgroundWorker;
 
-public class AwareWakeScreenPreferenceController extends AwareBasePreferenceController {
+public class SkipGestureFooterPreferenceController extends AwareFooterPreferenceController {
     public void copy() {
         super.copy();
     }
@@ -17,6 +16,10 @@ public class AwareWakeScreenPreferenceController extends AwareBasePreferenceCont
 
     public IntentFilter getIntentFilter() {
         return super.getIntentFilter();
+    }
+
+    public int getText() {
+        return R.string.gesture_aware_footer;
     }
 
     public boolean hasAsyncUpdate() {
@@ -39,18 +42,15 @@ public class AwareWakeScreenPreferenceController extends AwareBasePreferenceCont
         return super.useDynamicSliceSummary();
     }
 
-    public AwareWakeScreenPreferenceController(Context context, String str) {
-        super(context, str);
+    public int getAvailabilityStatus() {
+        return super.getAvailabilityStatus();
     }
 
     public CharSequence getSummary() {
-        return mContext.getText(isGestureEnabled() ? R.string.ambient_display_wake_screen_summary_on : R.string.gesture_setting_off);
+        return super.getSummary();
     }
 
-    private boolean isGestureEnabled() {
-        if (!mFeatureProvider.isEnabled(mContext) || Settings.Secure.getInt(mContext.getContentResolver(), "doze_wake_screen_gesture", 1) != 1) {
-            return false;
-        }
-        return true;
+    public SkipGestureFooterPreferenceController(Context context, String str) {
+        super(context, str);
     }
 }

@@ -2,28 +2,24 @@ package com.google.android.settings.aware;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.provider.SearchIndexableResource;
-
-import com.android.internal.logging.nano.MetricsProto;
 import com.android.settings.R;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.overlay.FeatureFactory;
 import com.android.settings.search.BaseSearchIndexProvider;
-import com.android.settings.search.Indexable;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class AwareSettings extends DashboardFragment {
-
-    private static final String TAG = "AwareSettings";
+    public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER = new BaseSearchIndexProvider(R.xml.aware_settings) {
+        public boolean isPageSearchEnabled(Context context) {
+            return FeatureFactory.getFactory(context).getAwareFeatureProvider().isSupported(context);
+        }
+    };
 
     public String getLogTag() {
-        return TAG;
+        return "AwareSettings";
     }
 
     public int getMetricsCategory() {
-        return MetricsProto.MetricsEvent.ABC;
+        return 1632;
     }
 
     public int getPreferenceScreenResId() {
@@ -39,8 +35,7 @@ public class AwareSettings extends DashboardFragment {
         super.onCreate(bundle);
         Bundle arguments = getArguments();
         if (arguments != null && arguments.getBoolean("show_aware_dialog_enabled", false)) {
-            AwareEnabledDialogFragment.show(this, true);
+            AwareEnabledDialogFragment.show(this, Boolean.TRUE);
         }
     }
 }
-

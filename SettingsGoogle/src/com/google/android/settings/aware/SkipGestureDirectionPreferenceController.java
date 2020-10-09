@@ -1,16 +1,47 @@
 package com.google.android.settings.aware;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.provider.Settings;
 import android.util.FeatureFlagUtils;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-
 import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
+import com.android.settings.slices.SliceBackgroundWorker;
 
-public class SkipGestureDirectionPreferenceController extends BasePreferenceController
-        implements Preference.OnPreferenceChangeListener {
+public class SkipGestureDirectionPreferenceController extends BasePreferenceController implements Preference.OnPreferenceChangeListener {
+    public void copy() {
+        super.copy();
+    }
+
+    public Class<? extends SliceBackgroundWorker> getBackgroundWorkerClass() {
+        return super.getBackgroundWorkerClass();
+    }
+
+    public IntentFilter getIntentFilter() {
+        return super.getIntentFilter();
+    }
+
+    public boolean hasAsyncUpdate() {
+        return super.hasAsyncUpdate();
+    }
+
+    public boolean isCopyableSlice() {
+        return super.isCopyableSlice();
+    }
+
+    public boolean isPublicSlice() {
+        return super.isPublicSlice();
+    }
+
+    public boolean isSliceable() {
+        return super.isSliceable();
+    }
+
+    public boolean useDynamicSliceSummary() {
+        return super.useDynamicSliceSummary();
+    }
 
     public SkipGestureDirectionPreferenceController(Context context, String str) {
         super(context, str);
@@ -28,8 +59,7 @@ public class SkipGestureDirectionPreferenceController extends BasePreferenceCont
     }
 
     public boolean onPreferenceChange(Preference preference, Object obj) {
-        Settings.Secure.putInt(mContext.getContentResolver(),
-                "skip_gesture_direction", Integer.parseInt((String) obj));
+        Settings.Secure.putInt(mContext.getContentResolver(), "skip_gesture_direction", Integer.parseInt((String) obj));
         updateState(preference);
         return true;
     }
@@ -42,7 +72,6 @@ public class SkipGestureDirectionPreferenceController extends BasePreferenceCont
     }
 
     private boolean isDirectionRTL() {
-        return Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                "skip_gesture_direction", 0, -2) == 0;
+        return Settings.Secure.getIntForUser(mContext.getContentResolver(), "skip_gesture_direction", 0, -2) == 0;
     }
 }

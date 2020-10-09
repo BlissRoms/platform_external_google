@@ -2,11 +2,10 @@ package com.google.android.settings.aware;
 
 import android.content.Context;
 import android.content.IntentFilter;
-import android.provider.Settings;
 import com.android.settings.R;
 import com.android.settings.slices.SliceBackgroundWorker;
 
-public class AwareWakeScreenPreferenceController extends AwareBasePreferenceController {
+public class AwareSettingsPreferenceController extends AwareGesturePreferenceController {
     public void copy() {
         super.copy();
     }
@@ -39,18 +38,11 @@ public class AwareWakeScreenPreferenceController extends AwareBasePreferenceCont
         return super.useDynamicSliceSummary();
     }
 
-    public AwareWakeScreenPreferenceController(Context context, String str) {
+    public AwareSettingsPreferenceController(Context context, String str) {
         super(context, str);
     }
 
-    public CharSequence getSummary() {
-        return mContext.getText(isGestureEnabled() ? R.string.ambient_display_wake_screen_summary_on : R.string.gesture_setting_off);
-    }
-
-    private boolean isGestureEnabled() {
-        if (!mFeatureProvider.isEnabled(mContext) || Settings.Secure.getInt(mContext.getContentResolver(), "doze_wake_screen_gesture", 1) != 1) {
-            return false;
-        }
-        return true;
+    public CharSequence getGestureSummary() {
+        return mContext.getText(mHelper.isEnabled() ? R.string.aware_settings_summary : R.string.gesture_setting_off);
     }
 }

@@ -1,53 +1,43 @@
 package com.google.android.settings.aware;
 
-import androidx.preference.PreferenceViewHolder;
-import android.net.Uri;
-import android.util.AttributeSet;
 import android.content.Context;
+import android.net.Uri;
+import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.view.View;
-
-import com.android.settingslib.CustomDialogPreferenceCompat;
+import androidx.preference.PreferenceViewHolder;
 import com.android.settings.R;
+import com.android.settings.overlay.FeatureFactory;
+import com.android.settingslib.CustomDialogPreferenceCompat;
+import com.android.settingslib.core.instrumentation.MetricsFeatureProvider;
 import com.google.android.settings.aware.AwareHelper;
 
 public class AwareDialogPreferenceBase extends CustomDialogPreferenceCompat {
-
     protected AwareHelper mHelper;
     private View mInfoIcon;
+    private MetricsFeatureProvider mMetricsFeatureProvider;
     private View mSummary;
     private View mTitle;
-
-    public AwareDialogPreferenceBase(Context context) {
-        super(context);
-        init();
-    }
-
-    public AwareDialogPreferenceBase(Context context, AttributeSet set) {
-        super(context, set);
-        init();
-    }
-
-    public AwareDialogPreferenceBase(Context context, AttributeSet set, int n) {
-        super(context, set, n);
-        init();
-    }
-
-    public AwareDialogPreferenceBase(Context context, AttributeSet set, int n, int n2) {
-        super(context, set, n, n2);
-        init();
-    }
-
-    private void init() {
-        setWidgetLayoutResource(R.layout.preference_widget_info);
-        (mHelper = new AwareHelper(getContext())).register( uri ->
-                updatePreference() );
-    }
 
     protected boolean isAvailable() {
         return false;
     }
 
-    @Override
+    public AwareDialogPreferenceBase(Context context, AttributeSet attributeSet, int i, int i2) {
+        super(context, attributeSet, i, i2);
+        init();
+    }
+
+    public AwareDialogPreferenceBase(Context context, AttributeSet attributeSet, int i) {
+        super(context, attributeSet, i);
+        init();
+    }
+
+    public AwareDialogPreferenceBase(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+        init();
+    }
+
     public void onBindViewHolder(PreferenceViewHolder preferenceViewHolder) {
         super.onBindViewHolder(preferenceViewHolder);
         mTitle = preferenceViewHolder.findViewById(16908310);
@@ -56,17 +46,12 @@ public class AwareDialogPreferenceBase extends CustomDialogPreferenceCompat {
         updatePreference();
     }
 
-    @Override
     public void performClick() {
         if (isAvailable()) {
             performEnabledClick();
-        }
-        else if (!mHelper.isAirplaneModeOn()) {
+        } else {
             super.performClick();
         }
-    }
-
-    protected void performEnabledClick() {
     }
 
     protected void updatePreference() {
@@ -74,20 +59,38 @@ public class AwareDialogPreferenceBase extends CustomDialogPreferenceCompat {
         if (view != null) {
             view.setEnabled(isAvailable());
         }
-        View summaryView = mSummary;
-        if (summaryView != null) {
-            summaryView.setEnabled(isAvailable());
+        View view2 = mSummary;
+        if (view2 != null) {
+            view2.setEnabled(isAvailable());
         }
-        View infoIconView = mInfoIcon;
-        if (infoIconView != null) {
-            int visibility;
-            if (!isAvailable() && !mHelper.isAirplaneModeOn()) {
-                visibility = View.VISIBLE;
+        if (mInfoIcon != null) {
+            int i = 0;
+            boolean z = isAvailable() || mHelper.isAirplaneModeOn() || mHelper.isBatterySaverModeOn();
+            View view3 = mInfoIcon;
+            if (z) {
+                i = 8;
             }
-            else {
-                visibility = View.GONE;
-            }
-            infoIconView.setVisibility(visibility);
+            view3.setVisibility(i);
         }
+    }
+
+    protected void performEnabledClick() {
+    }
+
+    private void init() {
+        Context context = getContext();
+        mMetricsFeatureProvider = FeatureFactory.getFactory(context).getMetricsFeatureProvider();
+        setWidgetLayoutResource(R.layout.preference_widget_info);
+        AwareHelper awareHelper = new AwareHelper(context);
+        mHelper = awareHelper;
+        awareHelper.register(new AwareHelper.Callback() {
+            public void onChange(Uri uri) {
+                AwareDialogPreferenceBase.updatePreference();
+                CharSequence summary = AwareDialogPreferenceBase.getSummary();
+                if (!TextUtils.isEmpty(summary)) {
+                    AwareDialogPreferenceBase.setSummary(summary);
+                }
+            }
+        });
     }
 }

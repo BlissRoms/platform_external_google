@@ -2,10 +2,7 @@ package com.google.android.settings.aware;
 
 import android.content.Context;
 import android.content.IntentFilter;
-import android.hardware.display.AmbientDisplayConfiguration;
 import android.net.Uri;
-import android.os.SystemProperties;
-import android.os.UserHandle;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
 import com.android.settings.R;
@@ -16,13 +13,9 @@ import com.android.settingslib.core.lifecycle.events.OnStart;
 import com.android.settingslib.core.lifecycle.events.OnStop;
 import com.google.android.settings.aware.AwareHelper;
 
-public class AwareDisplayPreferenceController extends BasePreferenceController implements LifecycleObserver, OnStart, OnStop, AwareHelper.Callback {
-    private static final int MY_USER = UserHandle.myUserId();
-    private static final String PROP_AWARE_AVAILABLE = "ro.vendor.aware_available";
-    private final AmbientDisplayConfiguration mConfig;
-    private final AwareHelper mHelper;
+public class AwareSettingsFooterPreferenceController extends BasePreferenceController implements LifecycleObserver, OnStart, OnStop, AwareHelper.Callback {
+    protected final AwareHelper mHelper = new AwareHelper(mContext);
     private Preference mPreference;
-
     public void copy() {
         super.copy();
     }
@@ -55,19 +48,12 @@ public class AwareDisplayPreferenceController extends BasePreferenceController i
         return super.useDynamicSliceSummary();
     }
 
-    public AwareDisplayPreferenceController(Context context, String str) {
+    public AwareSettingsFooterPreferenceController(Context context, String str) {
         super(context, str);
-        mHelper = new AwareHelper(context);
-        mConfig = new AmbientDisplayConfiguration(context);
     }
 
     public int getAvailabilityStatus() {
-        boolean alwaysOnAvailable = mConfig.alwaysOnAvailable();
-        boolean z = SystemProperties.getBoolean(PROP_AWARE_AVAILABLE, false);
-        if (alwaysOnAvailable || z) {
-            return 0;
-        }
-        return 3;
+        return mHelper.isSupported() ? 0 : 3;
     }
 
     public void displayPreference(PreferenceScreen preferenceScreen) {
@@ -76,15 +62,9 @@ public class AwareDisplayPreferenceController extends BasePreferenceController i
     }
 
     public CharSequence getSummary() {
-        boolean wakeDisplayGestureEnabled = mConfig.wakeDisplayGestureEnabled(MY_USER);
-        boolean alwaysOnEnabled = mConfig.alwaysOnEnabled(MY_USER);
-        if (wakeDisplayGestureEnabled && mHelper.isGestureConfigurable()) {
-            return mContext.getText(R.string.aware_wake_display_title);
-        }
-        if (alwaysOnEnabled) {
-            return mContext.getText(R.string.doze_always_on_title);
-        }
-        return mContext.getText(R.string.switch_off_text);
+        boolean isBatterySaverModeOn = mHelper.isBatterySaverModeOn();
+        boolean isAirplaneModeOn = mHelper.isAirplaneModeOn();
+        return mContext.getText((!isBatterySaverModeOn || !isAirplaneModeOn) ? isBatterySaverModeOn ? R.string.aware_footer_when_batterysaver_on : isAirplaneModeOn ? R.string.aware_footer_when_airplane_on : R.string.aware_settings_description : R.string.aware_footer_when_airplane_batterysaver_on);
     }
 
     public void onStart() {
